@@ -85,6 +85,7 @@ my @programs = (
   'vlc',
   'wget',
   'wireguard-tools',
+  'xclip',
   'xdo',
   'xdotool',
   'xorg',
