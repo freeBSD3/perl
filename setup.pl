@@ -326,6 +326,21 @@ alias newhop='perl ~/perl/relays.pl; sleep 5; ipaddr'
 alias macgrep="grep -Eo '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'"
 alias ipgrep="grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'"
 
+upgrade()
+{
+  doas freebsd-update fetch
+  doas freebsd-update install
+  doas freebsd-update install
+}
+
+gitpush()
+{
+  git pull ssh main
+  git add .
+  git commit -m 'edits'
+  git push ssh main
+}
+
 tidyperl()
 {
   perltidy -gnu -i=2 $1
