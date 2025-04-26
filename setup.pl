@@ -352,10 +352,24 @@ ipaddr()
   curl -s -o ipaddr -A "Windows NT" https://www.showmyip.com
   grep -E '>City|>Country|>Your IPv4|>Internet' ipaddr |\
   sed 's/<td>//g;s/<\/td>/ /g;s/<b>//g;s/<\/b>//g' |\
-  lolcat -g 00FFFF:80FF00 -b
-  # removes whitespace
-  # sed 's/<td>//g;s/<\/td>/ /g;s/<b>//g;s/<\/b>//g' |\
-  # sed 's/^[ \t]*//' | lolcat
+  sed 's/Your IPv4/IPv4:    /' |\
+  sed 's/City/City:    /' |\
+  sed 's/Country/Country: /' |\
+  sed 's/Internet Service Provider (ISP)/ISP:     /g' |\
+  lolcat -g FFFF00:FFA500 -b
+
+  # lolcat colors 
+  #--------------#
+  # Red: FF0000
+  # Orange: FFA500
+  # Yellow: FFFF00
+  # Green: 00FF00
+  # Cyan: 00FFFF
+  # Blue: 0000FF
+  # Purple: 800080
+  # Pink: FFC0CB
+  #--------------#
+
   rm ipaddr
 }
 
