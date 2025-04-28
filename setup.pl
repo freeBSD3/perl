@@ -22,7 +22,7 @@ if ($? != 0) {
 #################################################################
 # Set the home dir to setup
 
-my $parent_dir = '/home/jbm/tmp';
+my $parent_dir = '/home/jbm/';
 if (not -d $parent_dir)
 {
   mkdir $parent_dir or die "Failed to create $parent_dir\n";  
@@ -61,6 +61,7 @@ foreach my $dir (@dirs)
 # security hardening edits while root
 
 my @programs = (
+  'android-tools',
   'conky',
   'curl',
   'doas',
@@ -71,6 +72,7 @@ my @programs = (
   'fluxbox',
   'fusefs-exfat',
   'htop',
+  'geckodriver',
   'GraphicsMagick',
   'ksh93',
   'libreoffice',
@@ -103,14 +105,54 @@ sed -i '' 's/#*PermitRootLogin.*/PermitRootLogin no/' \\
 sed -i '' '/security.bsd.see_other_uids/s/#//' \\
   /etc/sysctl.conf
 
+sed -i '' 's/autoboot_delay="[0-9]*"/autoboot_delay="1"/' \\
+  /boot/loader.conf
+
 grep -q '^kern.randompid=1' /etc/sysctl.conf || \\
   echo 'kern.randompid=1' >> /etc/sysctl.conf
+
 grep -q '^hald_enable="YES"' /etc/rc.conf || \\
   echo 'hald_enable="YES"' >> /etc/rc.conf
+
 grep -q '^fusefs_enable="YES"' /etc/rc.conf || \\
   echo 'fusefs_enable="YES"' >> /etc/rc.conf
+
 grep -q '^ntpd_enable="YES"' /etc/rc.conf || \\
   echo 'ntpd_enable="YES"' >> /etc/rc.conf
+
+grep -q '^uhid_load="YES"' /boot/loader.conf || \\
+  echo 'uhid_load="YES"' >> /boot/loader.conf
+
+grep -q '^ums_load="YES"' /boot/loader.conf || \\
+  echo 'ums_load="YES"' >> /boot/loader.conf
+
+graphics_card_vendor=$(pciconf -lv | \\
+  grep -A 3 "vgapci" | grep -i "vendor")
+
+if echo "$graphics_card_vendor" | grep -qi "intel"; then
+  pkg install -y xf86-video-intel
+  kernel_module="i915kms"
+elif echo "$graphics_card_vendor" | grep -qi "amd"; then
+  pkg install -y xf86-video-amdgpu
+  kernel_module="amdgpu"
+else
+  echo "Unsupported graphics card"
+  exit 1
+fi
+
+if ! pkg info | grep -q "$kernel_module"; then
+  pkg install -y drm-kmod
+fi
+
+if ! kldstat | grep -q "$kernel_module"; then
+  kldload "$kernel_module"
+fi
+
+grep -q "^${kernel_module}_load=\"YES\"" /boot/loader.conf || \\
+  echo "${kernel_module}_load=\"YES\"" >> /boot/loader.conf
+
+
+pw usermod jbm -G wheel,video
 
 EOF");
 #################################################################
