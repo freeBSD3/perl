@@ -94,6 +94,7 @@ my @programs = (
   'xdo',
   'xdotool',
   'xorg',
+  'xorg-vfbserver',
   'yt-dlp',
 );
 
