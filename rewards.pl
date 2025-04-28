@@ -43,3 +43,5 @@ foreach my $char (split //, $command) {
     system("sleep 0.03");
 }
 system("xdotool key Return");
+sleep 3;
+system("xdotool key Ctrl+q");
