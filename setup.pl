@@ -436,6 +436,15 @@ wicon()
   doas dhclient wlan0
 }
 
+timeis()
+{
+  printf "\tBKK: "
+  printf "$(date "+%H:%M:%S %A %d %b")\n"
+  printf "\tLA: "
+  printf "$(TZ=America/Los_Angeles date \
+    "+%H:%M:%S %A %d %b")\n"
+}
+
 docs()
 {
 	cd ~/Documents
