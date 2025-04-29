@@ -6,12 +6,12 @@ use POSIX qw(strftime);
 
 
 # Start Xvfb
-system("Xvfb :99 -ac -screen 0 1920x1080x24 &");
-sleep 2;
+# system("Xvfb :99 -ac -screen 0 1920x1080x24 &");
+# sleep 2;
 
 
 # Set DISPLAY environment variable
-$ENV{DISPLAY} = ":99";
+# $ENV{DISPLAY} = ":99";
 
 my $password_file = "$ENV{HOME}/.ssh/passphrase1";
 open(my $pw, '<', $password_file) 
@@ -60,4 +60,4 @@ sleep 3;
 system("xdotool key Ctrl+q");
 
 # Kill Xvfb
-system("pkill Xvfb");
+# system("pkill Xvfb");
