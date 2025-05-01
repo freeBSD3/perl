@@ -85,6 +85,7 @@ my @programs = (
   'p5-Selenium-Remote-Driver',
   'p5-WWW-Mechanize',
   'qbittorrent',
+  'scrcpy',
   'scrot',
   'slock',
   'vlc',
