@@ -80,6 +80,7 @@ my @programs = (
   'lolcat',
   'mupdf',
   'netpbm',
+  'opencv',
   'p5-file-homedir',
   'p5-firefox-marionette',
   'p5-Selenium-Remote-Driver',
@@ -512,6 +513,54 @@ if (-f $keys_file) {
     open my $write_fh, '>', $keys_file or die $!;
     print $write_fh join("\n", @lines) . "\n";
     close $write_fh;
+}
+
+#################################################################
+
+
+#################################################################
+# Populate fluxbox startup file 
+
+my $startup;
+if (not -f "$parent_dir/.fluxbox/startup")
+{
+  open($kshrc, '>', "$parent_dir/.fluxbox/startup")
+    or die "Could not open file: $!";
+
+  print $startup <<'EOF';
+
+#!/bin/sh
+#
+# fluxbox startup-script:
+#
+# Lines starting with a '#' are ignored.
+
+# Change your keymap:
+xmodmap "/home/jbm/.Xmodmap"
+
+# Applications you want to run with fluxbox.
+# MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
+#
+# unclutter -idle 2 &
+# wmnd &
+# wmsmixer -w &
+# idesk &
+feh --bg-scale ~/Downloads/centralworld_night.jpg &
+xrdb -merge /home/jbm/.Xresources &
+redshift -O 4500 &
+xset -dpms &
+xset s off &
+
+# And last but not least we start fluxbox.
+# Because it is the last app you have to run it with ''exec'' before it.
+
+exec fluxbox
+# or if you want to keep a log:
+# exec fluxbox -log "/home/jbm/.fluxbox/log"
+
+EOF
+  close($kshrc);
+  undef $kshrc;
 }
 
 #################################################################
